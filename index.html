@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Chetana Ramaiyer</title>
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Scaffold - v2.0.0
+  * Template URL: https://bootstrapmade.com/scaffold-bootstrap-metro-style-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+      <div class="container d-flex">
+        <div class="logo mr-auto">
+          <ul>
+            <li><width ="100%;"><img src="assets/img/curlyhair.png"></a> </li>
+            <li><h1 style="font-size:100%;"><a href="index.html"><span>Chetana Ramaiyer</span></a></h1></li>
+          </ul>
+        </div>
+
+      </div>
+    </header><!-- End Header -->
+
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container">
+        <div> <p><br></p> <p><br></p> </div>
+
+        <div class="section-title" data-aos="fade-up">
+          <h1>Style Transfer<br></h1>
+          <h5>Chetana Ramaiyer</h5>
+          <br></br>
+
+          <div class="overview" data-aos="fade-up">
+              <div class="section-image" data-aos="fade-up">
+                  <div class="section-image-col" data-aos="fade-up">
+                      <img src="data/content/morning3.jpg" class="img-fluid" alt=""width = 400px>
+                      <figcaption>Content Image of Street in New York </figcaption>
+                  </div>
+                  <div class="section-image-col" data-aos="fade-up">
+                      <img src="data/style/abstract.jpg" class="img-fluid" alt=""width = 400px>
+                      <figcaption>Style Image of Abstract Painting</figcaption>
+                  </div>
+                  <div class="section-image-col" data-aos="fade-up">
+                      <img src="output/nymorn_abstr.png" class="img-fluid" alt="" width = 400px>
+                      <figcaption>Resulting Image of Style transferred</figcaption>
+                  </div>
+              </div>
+              <div class="section-image" data-aos="fade-up">
+                  <div class="section-image-col" data-aos="fade-up">
+                      <img src="data/content/rose.jpg" class="img-fluid" alt=""width = 400px>
+                      <figcaption>Content Image of Roses from my backyard </figcaption>
+                  </div>
+                  <div class="section-image-col" data-aos="fade-up">
+                      <img src="data/style/stainedglass2.jpg" class="img-fluid" alt=""width = 400px>
+                      <figcaption>Style Image of Stainged Glass</figcaption>
+                  </div>
+                  <div class="section-image-col" data-aos="fade-up">
+                      <img src="output/rose_stained.png" class="img-fluid" alt="" width = 400px>
+                      <figcaption>Resulting Image of Style transferred</figcaption>
+                  </div>
+              </div>
+          </div>
+          <h3>Overview</h3>
+        </div>
+
+
+        <div class="overview" data-aos="fade-up">
+            <p>This neural style transfer project is hands down my favorite from this semester. This project is based on this paper by Leon A. Gatys, Alex S. Ecker and Matthias Bethge. The goal of this project is to take a pattern image or painting and transfer its style onto a content image (a photograph).</p>
+            </p>
+            <p>In order to do this, we work with deep neural networks. One of the main takeaways of this project is the idea that neural nets are extremely strong tools, particularly with their power to separate content from style within images. The paper explains how we can use an artificial system that uses neural representations and reconstruct the content and styles of different images.</p>
+            <p>As the paper states, “The system uses neural representations to separate and recombine content and style of arbitrary images, providing a neural algorithm for the creation of artistic images. Content refers to the actual pixel values in an image. Style refers to a higher level overall architecture of an image.”</p>
+        </div>
+        <div class="overview" data-aos="fade-up">
+            <div class="section-title" data-aos="fade-up">
+                 <h3>How we transfer style:</h3>
+            </div>
+           <p>At a high level, the algorithm described in the paper independently separates the content and style of each image (does this using a neural network). As we delve into further convolutional layers of the network, only the higher level features are kept, so the reconstructions of the image include less detail. </p>
+           <p>To get more specific, I used features from the pretrained VGG_19 batchnormed model, as specified in the paper, to extract low level features from the images. The algorithm initially begins with a random noise image. Then, we use gradient descent to create a resulting image. We reconstruct an image's content and its style from various layers in the neural network. </p>
+           </p>
+           <h4>Loss function:</h3>
+           <p>Once content and style features are extracted, we compute our total loss. The function is a weighted sume of two components: the style loss and the content loss. The weights indicate whether the resulting image leans towards the content or style.</p>
+           <h5>Content Loss:</h4>
+           <p>This is measured by squared-error loss between the feature representations output and input image.  Essentially, it indicates how the feature map of the result image differs from the feature map of the source image. As described in the paper, we match the content representation on layer conv4_2.</p>
+           <h5>Style Loss:</h4>
+           <p>For style loss, the layers we are interested in are CNN1_1, CNN2_1, CNN3_1, CNN4_1 and CNN5_1 as described in the paper.  The style loss is a bit different than content loss because we don’t want style loss to include regional information. Because of this, we use the Gram matrices of the feature maps at each layer. We want to calculate the Gram matrix for the feature map of both the content and style image.  The style loss is the weighted Euclidean distance between the two Gram matrices. To get the total style loss, we sum across all layers.</p>
+           <h5>Final Loss:</h4>
+           <p>Once we have the style and content loss, we can define our total loss function which is dependent on  weighted hyperparameters α and β. The final loss function indicates how much content or style we would like to see in our resulting image. For example, a lower ratio of α / β would highlight style features more.</p>
+        </div>
+        <br></br>
+        <div class="section-title" data-aos="fade-up">
+             <h3>Results:</h3>
+        </div>
+        <div class="overview" data-aos="fade-up">
+            <div class="section-image" data-aos="fade-up">
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/jb_original_avg.png" class="img-fluid" alt="">
+                </div>
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/chess_original_avg.png" class="img-fluid" alt="">
+                    <p><br></p>
+                </div>
+            </div>
+            <div class="section-title" data-aos="fade-up">
+                 <h3>Failure Case:</h3>
+            </div>
+            <p>I took the image of the disco bar and I thought it would be really cool to be able to transfer the style from that image onto another image. I was curious if it would be possible to transfer the style of non-painting or patterned images. Unfortunately, it did not work out too well. As seen in the results below, the result image is not so much of a transfer of style as it is a overlay of the style input image. My guess is that the disco image lacked actual stylistic elements that are found in other style input images that we use. Because of this, the neural network didn’t develop a strong style representation for the disco image.</p>
+            <div class="section-image" data-aos="fade-up">
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/jb_original_avg.png" class="img-fluid" alt="">
+                </div>
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/chess_original_avg.png" class="img-fluid" alt="">
+                    <p><br></p>
+                </div>
+            </div>
+        </div>
+        <div class="section-title" data-aos="fade-up">
+             <h3>What I learned</h3>
+        </div>
+        <div class="overview" data-aos="fade-up">
+            <p> I learned how neural networks can be used for their perceptual abilities within the convolutional layers. These neural networks are powerful enough to separate content and style within images. This style transfer project was definitely one of my favorite in the class because I love taking photos and appreciate art, so I definitely want to continue to use my code to play around with photos I take in the future to create cool looking digital art.</p>
+        </div>
+
+
+        </section><!-- End Team Section -->
+
+    <section id="team" class="team">
+      <div class="container">
+          <div> <p><br></p> <p><br></p> </div>
+
+
+        <div> <p><br></p> <p><br></p> </div>
+        <div class="section-title" data-aos="fade-up">
+          <h1>Lightfield Camera<br></h1>
+          <br></br>
+
+          <h3>Overview</h3>
+        </div>
+
+        <div class="overview" data-aos="fade-up">
+            <p>In this project, we are working with light field data. We capture light field data by taking many
+                photographs over a plane orthogonal to the optical axis. Using this light field data, we can
+                simulate refocusing depth and adjusting aperture.
+            </p>
+            <p>The light field data I used was the Stanford Light Field archive’s light field dataset. This
+                was given in the form of 17x17 grid of images. </p>
+        </div>
+        <br></br>
+        <div class="section-title" data-aos="fade-up">
+             <h3>Depth Refocusing</h3>
+        </div>
+
+        <div class="overview" data-aos="fade-up">
+            <p>
+           To begin with, I averaged all the images. The initial focal point for the jellybean dataset was on the front objects (the front jellybeans were sharper than the background jellybeans). This was because in the jellybean dataset, the objects that moved the most across the images were the background jellybeans whereas the front jellybeans stay relatively in the same region. For the average of the chess dataset, however, the front chess pieces are blurrier because those objects move around more than chess pieces farther away. Here is the result from this:
+           </p>
+           <div class="section-image" data-aos="fade-up">
+               <div class="section-image-col" data-aos="fade-up">
+                   <img src="output/jb_original_avg.png" class="img-fluid" alt="">
+               </div>
+               <div class="section-image-col" data-aos="fade-up">
+                   <img src="output/chess_original_avg.png" class="img-fluid" alt="">
+                   <p><br></p>
+               </div>
+           </div>
+           <br></br>
+           <p>In order to refocus the depth, we iterate through all the images and shift them to the center image in the grid. In this case, the center image would be the image at position (8,8). For example, if we are looking at the (i,j)the image, the shift to the center image would be
+<br /> <b>shift = (i-8, j-8)* alpha</b> where alpha is some constant. Once we shift for every image (using np.roll), we average all the shifted images, which creates a resulting image to focus at certain parts of the image. </p>
+        <p> Finally, we iterate over a range of alpha values to create an animation of the images focused at different depths. Below are the results: </p>
+        <div class="section-image" data-aos="fade-up">
+            <div class="section-image-col" data-aos="fade-up">
+                <img src="output/jellybean_refocused.gif" class="img-fluid" alt="">
+                <figcaption>Shifted images with alpha values from -6 to 6</figcaption>
+            </div>
+            <div class="section-image-col" data-aos="fade-up">
+                <img src="output/chess_refocused.gif" class="img-fluid" alt="">
+                <figcaption>Shifted images with alpha values from -3 to 1</figcaption>
+                <p><br></p>
+            </div>
+        </div>
+        </div>
+
+        <div class="section-title" data-aos="fade-up">
+             <h3>Aperature Adjustment</h3>
+        </div>
+        <div class="overview" data-aos="fade-up">
+                <p>In this part, we could adjust the aperture of the images. First, let’s define what aperture is. Aperture is defined as the measure of how big the opening that allows light in is. Therefore the smaller the aperture, the less light that is let in, which allows it to focus better on specific parts of the image and hence, the image is sharper. On the other hand, larger aperture means you’ll get a blurrier image. In terms of our grid of images, a smaller aperture is represented by letting in less light and therefore averaging less images together.</p>
+                <p>In order to simulate changing the aperture while maintaining a constant point of focus, we could take the average of a given radius of images around the center image in the grid (a grid around the center image of size radius * radius). The smaller the radius simulates a smaller aperture because it’ll be more focused.</p>
+                <div class="section-image" data-aos="fade-up">
+                    <div class="section-image-col" data-aos="fade-up">
+                        <img src="output/jb_aperature_0.png" class="img-fluid" alt="">
+                        <figcaption>Low aperture (Jellybean data with radius 0)</figcaption>
+                    </div>
+                    <div class="section-image-col" data-aos="fade-up">
+                        <img src="output/jb_aperature_7.png" class="img-fluid" alt="">
+                        <figcaption>High aperture (Jellybean data with radius 7)</figcaption>
+                    </div>
+                </div>
+                <br></br>
+                <div class="section-image" data-aos="fade-up">
+                    <div class="section-image-col" data-aos="fade-up">
+                        <img src="output/chess_aperature_0.png" class="img-fluid" alt="">
+                        <figcaption>Low aperture (Chess data with radius 0)</figcaption>
+                    </div>
+                    <div class="section-image-col" data-aos="fade-up">
+                        <img src="output/chess_aperature_7.png" class="img-fluid" alt="">
+                        <figcaption>High aperture (Chess data with radius 7)</figcaption>
+                    </div>
+                </div>
+
+                <br></br>
+                <p> Finally, we can create an animation of different aperatures by passing in various radii to create
+                    images with different aperature sizes. Here is the result of the jellybean  data with radius 0-8: </p>
+
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/jb_aperature.gif" class="img-fluid" alt="" width = 1000px;>
+                    <figcaption>Gif of jellybean data with radius 0 - 8</figcaption>
+                </div>
+                <br></br>
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/chess_aperture.gif" class="img-fluid" alt="" width = 1000px;>
+                    <figcaption>Gif of chess data with radius 0 - 8</figcaption>
+                </div>
+        </div>
+
+        <br></br>
+        <div class="section-title" data-aos="fade-up">
+             <h3>Bells and Whistles: Uploading your own data</h3>
+        </div>
+        <div class="overview" data-aos="fade-up">
+            <p>For this part, I uploaded my own grid of images (attempted to create lightfield data) and used my refocusing function on this data. As you can see from the result below, it didn’t end up refocusing very well. I captured 16 photos in a 4x4 grid of a set of rocks in a U-shape (very similar to the jellybean setup). Each individual refocused image itself appeared to be very blurry. This is most likely due to the fact that I manually took the grid of images myself and the fact that there is significantly less data. In the Stanford lightfield datasets, there were 289 total images and in mine, there were 16 total images. Moreover, the spacing between each image probably left a lot of gaps and were too inconsistent as compared to more legitimate lightfield camera data. Because of these reasons, when you try to shift every image in the grid to the center and average all of them, the objects in the image don’t align well and the objects end up appearing in different positions in the resulting refocused image.
+            </p>
+
+            <br></br>
+            <h3>Painted Bottles:</h3>
+            <div class="section-image" data-aos="fade-up">
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/bottles_refocused_-4.png" class="img-fluid" alt=""width = 1000px;>
+                    <figcaption>Painted bottles data shifted with alpha = -4 </figcaption>
+                </div>
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/bottles_refocused_4.png" class="img-fluid" alt=""width = 1000px;>
+                    <figcaption>Painted bottles data shifted with alpha = 4 </figcaption>
+                </div>
+            </div>
+            <br></br>
+            <div class="section-image" data-aos="fade-up">
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/bottles_refocused.gif" class="img-fluid" alt=""width = 800px;>
+                    <figcaption>Painted bottles data with alpha values -4 to 4</figcaption>
+                </div>
+            </div>
+            <br></br>
+            <h3>Rocks:</h3>
+            <div class="section-image" data-aos="fade-up">
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/rock_refocused_-6.png" class="img-fluid" alt=""width = 1000px;>
+                    <figcaption>Rocks data shifted with alpha = -6 </figcaption>
+                </div>
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/rock_refocused_6.png" class="img-fluid" alt=""width = 1000px;>
+                    <figcaption>Rocks data shifted with alpha = 6 </figcaption>
+                </div>
+            </div>
+            <br></br>
+            <div class="section-image" data-aos="fade-up">
+                <div class="section-image-col" data-aos="fade-up">
+                    <img src="output/rock_refocus.gif" class="img-fluid" alt=""width = 800px;>
+                    <figcaption>Rocks data with alpha values -6 to 6</figcaption>
+                </div>
+            </div>
+        </div>
+
+        <br></br>
+        <div class="section-title" data-aos="fade-up">
+             <h3>What I learned</h3>
+        </div>
+        <div class="overview" data-aos="fade-up">
+            <p>With this project, I learned a lot of very applicable lessons, especially for phototaking itself. One of the biggest things I learned is that with a lightfield camera, you can simulate many different image processing strategies. This is because lightfield cameras provide a lot of data, where only shifting the position of various images is required to achieve a certain effect (like refocusing or aperture). Moreover, I take a lot of photographs in my freetime. Personally, when I’m taking photos on my DSLR, I end up retaking a lot of my pictures in order to shift certain factors on the camera like focus depth or aperture. Instead of this traditional method of photography, lightfield data changes the way people approach photography because they do not need to retake many photos and later edit additional features on their computer. If you have enough lightfield data, you can achieve the adjustment of aperture and depth refocusing through code similar to what I implemented above. </p>
+        </div>
+
+
+        </section><!-- End Team Section -->
+
+
+  </main><!-- End #main -->
+
+
+  <a href="#" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
+
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+    <footer id="footer">
+        <div class="copyright">
+          &copy; Copyright <strong><span>Scaffold</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/scaffold-bootstrap-metro-style-template/ -->
+          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+
+    </footer><!-- End Footer -->
+
+</body>
+
+</html>
